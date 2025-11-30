@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ressources - EduBot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #7209b7;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --math-color: #4361ee;
+            --french-color: #f72585;
+            --science-color: #4cc9f0;
+            --history-color: #7209b7;
+            --geography-color: #f77f00;
+            --arts-color: #9d4edd;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+        
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        .resources-content {
+            padding: 30px;
+        }
+        
+        .resources-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+        
+        .resources-title h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .resources-title p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-btn.active {
+            color: white;
+        }
+        
+        .filter-btn.all {
+            background-color: #e9ecef;
+            color: var(--dark-color);
+        }
+        
+        .filter-btn.all.active {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .filter-btn.math {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--math-color);
+        }
+        
+        .filter-btn.math.active {
+            background-color: var(--math-color);
+            color: white;
+        }
+        
+        .filter-btn.french {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--french-color);
+        }
+        
+        .filter-btn.french.active {
+            background-color: var(--french-color);
+            color: white;
+        }
+        
+        .filter-btn.science {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--science-color);
+        }
+        
+        .filter-btn.science.active {
+            background-color: var(--science-color);
+            color: white;
+        }
+        
+        .filter-btn.history {
+            background-color: rgba(114, 9, 183, 0.1);
+            color: var(--history-color);
+        }
+        
+        .filter-btn.history.active {
+            background-color: var(--history-color);
+            color: white;
+        }
+        
+        .filter-btn.geography {
+            background-color: rgba(247, 127, 0, 0.1);
+            color: var(--geography-color);
+        }
+        
+        .filter-btn.geography.active {
+            background-color: var(--geography-color);
+            color: white;
+        }
+        
+        .filter-btn.arts {
+            background-color: rgba(157, 78, 221, 0.1);
+            color: var(--arts-color);
+        }
+        
+        .filter-btn.arts.active {
+            background-color: var(--arts-color);
+            color: white;
+        }
+        
+        .search-bar {
+            display: flex;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #e3e6f0;
+            border-radius: 50px 0 0 50px;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            padding: 12px 20px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .resource-header {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resource-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+        }
+        
+        .resource-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 2;
+        }
+        
+        .math-bg {
+            background: linear-gradient(45deg, var(--math-color), #5a75ff);
+        }
+        
+        .french-bg {
+            background: linear-gradient(45deg, var(--french-color), #ff5c8d);
+        }
+        
+        .science-bg {
+            background: linear-gradient(45deg, var(--science-color), #64dfff);
+        }
+        
+        .history-bg {
+            background: linear-gradient(45deg, var(--history-color), #8b5fff);
+        }
+        
+        .geography-bg {
+            background: linear-gradient(45deg, var(--geography-color), #ff9e40);
+        }
+        
+        .arts-bg {
+            background: linear-gradient(45deg, var(--arts-color), #b47aff);
+        }
+        
+        .resource-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .resource-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        
+        .resource-description {
+            color: #6c757d;
+            margin-bottom: 20px;
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .resource-level {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .resource-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .resource-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .view-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        .save-btn {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .save-btn.saved {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .resource-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #dee2e6;
+        }
+        
+        @media (max-width: 768px) {
+            .filters {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            .back-button {
+                align-self: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-book"></i> Ressources Éducatives</h1>
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Retour à l'Accueil
+            </a>
+        </div>
+
+        <div class="resources-content">
+            <div class="resources-title">
+                <h1>Ressources d'Apprentissage</h1>
+                <p>Découvrez des ressources éducatives pour toutes les matières</p>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn all active" data-filter="all">
+                    <i class="fas fa-layer-group"></i> Toutes
+                </button>
+                <button class="filter-btn math" data-filter="math">
+                    <i class="fas fa-calculator"></i> Mathématiques
+                </button>
+                <button class="filter-btn french" data-filter="french">
+                    <i class="fas fa-book"></i> Français
+                </button>
+                <button class="filter-btn science" data-filter="science">
+                    <i class="fas fa-flask"></i> Sciences
+                </button>
+                <button class="filter-btn history" data-filter="history">
+                    <i class="fas fa-landmark"></i> Histoire
+                </button>
+                <button class="filter-btn geography" data-filter="geography">
+                    <i class="fas fa-globe"></i> Géographie
+                </button>
+                <button class="filter-btn arts" data-filter="arts">
+                    <i class="fas fa-paint-brush"></i> Arts
+                </button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Rechercher une ressource...">
+                <button id="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="resources-grid" id="resources-grid">
+                <!-- Ressources de Mathématiques -->
+                <div class="resource-card" data-category="math" data-level="avance">
+                    <div class="resource-header math-bg">
+                        <i class="fas fa-calculator"></i>
+                        <span class="resource-category">Mathématiques</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Algèbre Avancée</h3>
+                        <p class="resource-description">Cours complet sur les équations polynomiales, les nombres complexes et les matrices avec exercices corrigés.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Avancé</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>2h 30min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="math" data-level="intermediaire">
+                    <div class="resource-header math-bg">
+                        <i class="fas fa-shapes"></i>
+                        <span class="resource-category">Mathématiques</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Géométrie dans l'Espace</h3>
+                        <p class="resource-description">Comprendre les volumes, les sections planes et les théorèmes de géométrie dans l'espace avec illustrations 3D.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Intermédiaire</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>1h 45min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ressources de Français -->
+                <div class="resource-card" data-category="french" data-level="debutant">
+                    <div class="resource-header french-bg">
+                        <i class="fas fa-pen-fancy"></i>
+                        <span class="resource-category">Français</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Grammaire Essentielle</h3>
+                        <p class="resource-description">Les règles fondamentales de grammaire, orthographe et conjugaison avec exercices d'application et quiz.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Débutant</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>3h 15min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="french" data-level="avance">
+                    <div class="resource-header french-bg">
+                        <i class="fas fa-feather"></i>
+                        <span class="resource-category">Français</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Analyse Littéraire</h3>
+                        <p class="resource-description">Méthodologie pour analyser des textes classiques et contemporains, figures de style et procédés littéraires.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Avancé</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>2h 10min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ressources de Sciences -->
+                <div class="resource-card" data-category="science" data-level="intermediaire">
+                    <div class="resource-header science-bg">
+                        <i class="fas fa-atom"></i>
+                        <span class="resource-category">Sciences</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Chimie Organique</h3>
+                        <p class="resource-description">Introduction aux composés carbonés, réactions fondamentales et applications dans la vie quotidienne.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Intermédiaire</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>2h 30min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="science" data-level="debutant">
+                    <div class="resource-header science-bg">
+                        <i class="fas fa-dna"></i>
+                        <span class="resource-category">Sciences</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Biologie Cellulaire</h3>
+                        <p class="resource-description">Découverte de la cellule, son fonctionnement, division cellulaire et processus biologiques fondamentaux.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Débutant</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>1h 50min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ressources d'Histoire -->
+                <div class="resource-card" data-category="history" data-level="intermediaire">
+                    <div class="resource-header history-bg">
+                        <i class="fas fa-crown"></i>
+                        <span class="resource-category">Histoire</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Révolution Française</h3>
+                        <p class="resource-description">Analyse des causes, déroulement et conséquences de la Révolution française à travers documents historiques.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Intermédiaire</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>2h 05min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ressources de Géographie -->
+                <div class="resource-card" data-category="geography" data-level="intermediaire">
+                    <div class="resource-header geography-bg">
+                        <i class="fas fa-globe-americas"></i>
+                        <span class="resource-category">Géographie</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Géopolitique Mondiale</h3>
+                        <p class="resource-description">Enjeux géopolitiques contemporains, relations internationales et dynamiques des puissances mondiales.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Intermédiaire</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>2h 45min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ressources d'Arts -->
+                <div class="resource-card" data-category="arts" data-level="debutant">
+                    <div class="resource-header arts-bg">
+                        <i class="fas fa-palette"></i>
+                        <span class="resource-category">Arts</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Histoire de l'Art</h3>
+                        <p class="resource-description">Parcours à travers les mouvements artistiques majeurs, de la Renaissance à l'art contemporain.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Débutant</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>3h 20min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plus de ressources... -->
+                <div class="resource-card" data-category="math" data-level="debutant">
+                    <div class="resource-header math-bg">
+                        <i class="fas fa-sort-amount-down"></i>
+                        <span class="resource-category">Mathématiques</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Statistiques Basiques</h3>
+                        <p class="resource-description">Introduction aux concepts statistiques : moyenne, médiane, variance et représentations graphiques.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Débutant</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>1h 30min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="science" data-level="avance">
+                    <div class="resource-header science-bg">
+                        <i class="fas fa-magnet"></i>
+                        <span class="resource-category">Sciences</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Physique Quantique</h3>
+                        <p class="resource-description">Introduction aux principes de la mécanique quantique, dualité onde-particule et applications modernes.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Avancé</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>3h 45min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="history" data-level="avance">
+                    <div class="resource-header history-bg">
+                        <i class="fas fa-helmet-battle"></i>
+                        <span class="resource-category">Histoire</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Guerres Mondiales</h3>
+                        <p class="resource-description">Analyse comparative des deux guerres mondiales : causes, acteurs, déroulements et conséquences.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Avancé</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>4h 10min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-card" data-category="geography" data-level="debutant">
+                    <div class="resource-header geography-bg">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <span class="resource-category">Géographie</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3 class="resource-title">Cartographie</h3>
+                        <p class="resource-description">Apprendre à lire et interpréter les cartes, les différentes projections et outils cartographiques modernes.</p>
+                        <div class="resource-meta">
+                            <div class="resource-level">
+                                <i class="fas fa-signal"></i>
+                                <span>Débutant</span>
+                            </div>
+                            <div class="resource-duration">
+                                <i class="far fa-clock"></i>
+                                <span>1h 55min</span>
+                            </div>
+                        </div>
+                        <div class="resource-actions">
+                            <button class="resource-btn view-btn">
+                                <i class="fas fa-eye"></i> Voir
+                            </button>
+                            <button class="resource-btn save-btn">
+                                <i class="far fa-bookmark"></i> Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Éléments DOM
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-btn');
+            const resourceCards = document.querySelectorAll('.resource-card');
+            const resourcesGrid = document.getElementById('resources-grid');
+
+            // Filtrage par catégorie
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Retirer la classe active de tous les boutons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Ajouter la classe active au bouton cliqué
+                    button.classList.add('active');
+
+                    // Filtrer les ressources
+                    const filter = button.getAttribute('data-filter');
+                    filterResources(filter, searchInput.value.toLowerCase());
+                });
+            });
+
+            // Recherche de ressources
+            searchButton.addEventListener('click', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                filterResources(activeFilter, searchTerm);
+            });
+
+            searchInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+                    filterResources(activeFilter, searchTerm);
+                }
+            });
+
+            // Fonction de filtrage
+            function filterResources(category, searchTerm = '') {
+                let visibleCount = 0;
+
+                resourceCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    const title = card.querySelector('.resource-title').textContent.toLowerCase();
+                    const description = card.querySelector('.resource-description').textContent.toLowerCase();
+
+                    const matchesCategory = category === 'all' || cardCategory === category;
+                    const matchesSearch = searchTerm === '' ||
+                        title.includes(searchTerm) ||
+                        description.includes(searchTerm);
+
+                    if (matchesCategory && matchesSearch) {
+                        card.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Afficher un message si aucun résultat
+                let noResults = document.querySelector('.no-results');
+                if (visibleCount === 0) {
+                    if (!noResults) {
+                        noResults = document.createElement('div');
+                        noResults.className = 'no-results';
+                        noResults.innerHTML = `
+                            <i class="fas fa-search"></i>
+                            <h3>Aucune ressource trouvée</h3>
+                            <p>Essayez de modifier vos critères de recherche</p>
+                        `;
+                        resourcesGrid.appendChild(noResults);
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            }
+
+            // Sauvegarde des ressources
+            const saveButtons = document.querySelectorAll('.save-btn');
+            saveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.classList.toggle('saved');
+                    if (this.classList.contains('saved')) {
+                        this.innerHTML = '<i class="fas fa-bookmark"></i> Sauvegardé';
+                    } else {
+                        this.innerHTML = '<i class="far fa-bookmark"></i> Sauvegarder';
+                    }
+                });
+            });
+
+            // Animation des cartes au chargement
+            const cards = document.querySelectorAll('.resource-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+        });
+    </script>
+</body>
+
+</html>

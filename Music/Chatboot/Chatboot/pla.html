@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduBot - Assistant Pédagogique Intelligent</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+         :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #7209b7;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --bot-msg-color: #e6f2ff;
+            --user-msg-color: #4361ee;
+            --user-msg-text: white;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .app-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background-color: white;
+            color: var(--dark-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaeaea;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fafbff;
+        }
+        
+        .message {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.5;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .bot-message {
+            align-self: flex-start;
+            background-color: var(--bot-msg-color);
+            color: var(--dark-color);
+            border-top-left-radius: 5px;
+        }
+        
+        .user-message {
+            align-self: flex-end;
+            background-color: var(--user-msg-color);
+            color: var(--user-msg-text);
+            border-top-right-radius: 5px;
+        }
+        
+        .chat-input-container {
+            padding: 15px;
+            border-top: 1px solid #eaeaea;
+            background-color: white;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #e3e6f0;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+        
+        .chat-input button {
+            padding: 12px 20px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .chat-input button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 15px;
+            border-top: 1px solid #eaeaea;
+            background-color: white;
+        }
+        
+        .quick-reply {
+            padding: 8px 16px;
+            background-color: var(--light-color);
+            border: 1px solid #e3e6f0;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quick-reply:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .user-profile {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-color), var(--warning-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .user-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .user-level {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 30px;
+        }
+        
+        .sidebar-menu li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding-left: 10px;
+        }
+        
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+        }
+        
+        .progress-section {
+            margin-top: auto;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .progress-title {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, var(--success-color), #4cc9f0);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            font-size: 0.8rem;
+            text-align: right;
+        }
+        
+        .learning-resources {
+            display: none;
+            padding: 20px;
+            background-color: #f8f9fc;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .resource-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resource-img {
+            height: 140px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .resource-content {
+            padding: 15px;
+        }
+        
+        .resource-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+        
+        .resource-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .resource-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .resource-link:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .quiz-container {
+            display: none;
+            padding: 20px;
+            background-color: #f8f9fc;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .quiz-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            text-align: center;
+        }
+        
+        .quiz-question {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            padding: 12px 15px;
+            border: 1px solid #e3e6f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quiz-option:hover {
+            background-color: #f8f9fc;
+            border-color: var(--primary-color);
+        }
+        
+        .quiz-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .quiz-btn {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .quiz-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .quiz-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .message-typing {
+            display: flex;
+            align-items: center;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .typing-dots {
+            display: flex;
+            margin-left: 10px;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .suggestion-chip {
+            padding: 6px 12px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .suggestion-chip:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #4cc9f0;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                height: 95vh;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                padding: 10px;
+                align-items: center;
+            }
+            .user-profile {
+                display: none;
+            }
+            .sidebar-menu {
+                display: flex;
+                margin-top: 0;
+                gap: 15px;
+                overflow-x: auto;
+            }
+            .sidebar-menu li {
+                border-bottom: none;
+                padding: 5px;
+            }
+            .progress-section {
+                display: none;
+            }
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="user-name">Étudiant</div>
+                <div class="user-level">Niveau: Débutant</div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" class="menu-link" data-target="chat"><i class="fas fa-comment-dots"></i> Chat</a></li>
+                <li><a href="#" class="menu-link" data-target="resources"><i class="fas fa-book"></i> Ressources</a></li>
+                <li><a href="#" class="menu-link" data-target="quiz"><i class="fas fa-brain"></i> Quiz</a></li>
+                <li><a href="#" class="menu-link" data-target="progress"><i class="fas fa-chart-line"></i> Progression</a></li>
+                <li><a href="#" class="menu-link" data-target="settings"><i class="fas fa-cog"></i> Paramètres</a></li>
+            </ul>
+
+            <div class="progress-section">
+                <div class="progress-title">
+                    <span>Progression de la semaine</span>
+                    <span>65%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text">12/20 objectifs complétés</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <h2>EduBot Assistant</h2>
+                <div class="status">En ligne <span class="status-indicator"></span></div>
+            </div>
+
+            <div class="content-section" id="chat-section">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        <p>👋 Bonjour ! Je suis EduBot, ton assistant personnel pour améliorer tes performances scolaires.</p>
+                        <p>Je peux t'aider à organiser ton travail, te proposer des méthodes d'étude, te recommander des ressources, et même te faire réviser avec des quiz personnalisés !</p>
+                        <p>Par quoi aimerais-tu commencer ?</p>
+
+                        <div class="suggestion-chips">
+                            <div class="suggestion-chip">Planification</div>
+                            <div class="suggestion-chip">Mémorisation</div>
+                            <div class="suggestion-chip">Concentration</div>
+                            <div class="suggestion-chip">Gestion du stress</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-replies" id="quick-replies">
+                    <div class="quick-reply" data-msg="Comment mieux m'organiser ?"><i class="fas fa-calendar"></i> Organisation</div>
+                    <div class="quick-reply" data-msg="Comment rester motivé ?"><i class="fas fa-fire"></i> Motivation</div>
+                    <div class="quick-reply" data-msg="Techniques de mémorisation"><i class="fas fa-brain"></i> Mémorisation</div>
+                    <div class="quick-reply" data-msg="Gestion du stress"><i class="fas fa-heart"></i> Stress</div>
+                    <div class="quick-reply" data-msg="Proposer un quiz"><i class="fas fa-puzzle-piece"></i> Quiz</div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input">
+                        <input type="text" id="user-input" placeholder="Posez votre question...">
+                        <button id="send-btn"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learning-resources" id="resources-section">
+                <h2>Ressources d'apprentissage</h2>
+                <p>Découvrez des ressources sélectionnées pour améliorer vos compétences</p>
+
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <div class="resource-img"><i class="fas fa-brain"></i></div>
+                        <div class="resource-content">
+                            <div class="resource-title">Techniques de mémorisation</div>
+                            <div class="resource-desc">Découvrez les méthodes les plus efficaces pour mémoriser durablement</div>
+                            <a href="#" class="resource-link">Accéder</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-img"><i class="fas fa-clock"></i></div>
+                        <div class="resource-content">
+                            <div class="resource-title">Gestion du temps</div>
+                            <div class="resource-desc">Apprenez à optimiser votre temps et à éviter la procrastination</div>
+                            <a href="#" class="resource-link">Accéder</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-img"><i class="fas fa-book"></i></div>
+                        <div class="resource-content">
+                            <div class="resource-title">Méthodologie de travail</div>
+                            <div class="resource-desc">Développez des méthodes efficaces pour étudier et réussir</div>
+                            <a href="#" class="resource-link">Accéder</a>
+                        </div>
+                    </div>
+
+                    <div class="resource-card">
+                        <div class="resource-img"><i class="fas fa-chart-line"></i></div>
+                        <div class="resource-content">
+                            <div class="resource-title">Stratégies d'examen</div>
+                            <div class="resource-desc">Maximisez vos résultats aux examens avec les bonnes stratégies</div>
+                            <a href="#" class="resource-link">Accéder</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" id="quiz-section">
+                <h2 class="quiz-title">Quiz de connaissances</h2>
+
+                <div class="quiz-question">
+                    <div class="question-text">Quelle est la technique de mémorisation qui consiste à répéter l'information à intervalles réguliers ?</div>
+                    <div class="quiz-options">
+                        <div class="quiz-option">A) La répétition espacée</div>
+                        <div class="quiz-option">B) La relecture passive</div>
+                        <div class="quiz-option">C) Le par cœur intensif</div>
+                        <div class="quiz-option">D) L'impression visuelle</div>
+                    </div>
+                </div>
+
+                <div class="quiz-navigation">
+                    <button class="quiz-btn" id="prev-btn">Précédent</button>
+                    <button class="quiz-btn" id="next-btn">Suivant</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const quickReplies = document.getElementById('quick-replies');
+            const menuLinks = document.querySelectorAll('.menu-link');
+            const contentSections = document.querySelectorAll('.content-section, .learning-resources, .quiz-container');
+            const suggestionChips = document.querySelectorAll('.suggestion-chip');
+
+            // Fonction pour ajouter un message au chat
+            function addMessage(message, isUser) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+
+                // Pour gérer les sauts de ligne
+                const messageLines = message.split('\n');
+                messageLines.forEach(line => {
+                    const p = document.createElement('p');
+                    p.textContent = line;
+                    messageDiv.appendChild(p);
+                });
+
+                chatMessages.appendChild(messageDiv);
+
+                // Scroll vers le bas pour voir le nouveau message
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Fonction pour afficher l'indicateur de frappe
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.classList.add('message-typing');
+                typingDiv.id = 'typing-indicator';
+                typingDiv.innerHTML = 'EduBot écrit...<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Fonction pour masquer l'indicateur de frappe
+            function hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+
+            // Base de connaissances étendue
+            const knowledgeBase = {
+                organisation: [
+                    "Pour mieux t'organiser, je te conseille de:",
+                    "1) 📅 Utiliser un planner ou agenda pour planifier tes sessions d'étude",
+                    "2) 🎯 Prioriser tes tâches avec la matrice Eisenhower (urgent/important)",
+                    "3) ⏱️ Diviser ton travail en sessions de 25-30 min (technique Pomodoro)",
+                    "4) 🔄 Éviter le multitâche qui réduit la productivité de 40%",
+                    "5) 🧘‍♂️ Prévoir des pauses régulières pour maintenir la concentration"
+                ].join('\n'),
+
+                motivation: [
+                    "La motivation fluctue naturellement. Pour la maintenir:",
+                    "1) 🎯 Fixe-toi des objectifs SMART (Spécifiques, Mesurables, Atteignables, Réalistes, Temporels)",
+                    "2) 🎉 Célèbre tes petites victoires avec des récompenses",
+                    "3) 👥 Trouve un partenaire d'étude pour une saine émulation",
+                    "4) 💡 Rappelle-toi régulièrement pourquoi tu étudies et ton objectif final",
+                    "5) 🌈 Utilise la visualisation positive pour anticiper ta réussite"
+                ].join('\n'),
+
+                mémorisation: [
+                    "Pour mieux mémoriser:",
+                    "1) 🔁 Utilise la répétition espacée (logiciels comme Anki)",
+                    "2) 🧠 Fais des associations d'idées avec la méthode des loci",
+                    "3) 👨‍🏫 Enseigne ce que tu apprends à quelqu'un d'autre (effet Protégé)",
+                    "4) 🗺️ Utilise des mind maps pour structurer l'information",
+                    "5) 📝 Teste-toi régulièrement plutôt que simplement relire",
+                    "6) 📖 Crée des histoires ou acronymes pour les listes complexes"
+                ].join('\n'),
+
+                stress: [
+                    "Pour gérer le stress:",
+                    "1) 🌬️ Pratique la respiration profonde (4-7-8: inspire 4s, retiens 7s, expire 8s)",
+                    "2) 🏃‍♂️ Fais des pauses actives (étirements, marche courte)",
+                    "3) 🥗 Maintenir une hygiène de vie saine (sommeil, alimentation, exercice)",
+                    "4) 💭 Visualise ta réussite pour renforcer la confiance",
+                    "5) 🗣️ N'hésite pas à en parler à tes professeurs ou un conseiller",
+                    "6) 🧘‍♀️ Pratique la pleine conscience pour réduire l'anxiété"
+                ].join('\n'),
+
+                concentration: [
+                    "Pour améliorer ta concentration:",
+                    "1) 📵 Élimine les distractions (téléphone en mode avion, bloqueurs de sites)",
+                    "2) 🪑 Crée un environnement dédié au travail, bien éclairé et aéré",
+                    "3) 🍅 Utilise la technique Pomodoro (25min travail/5min pause)",
+                    "4) 🔄 Fais une seule chose à la fois (monotâche)",
+                    "5) 🧠 Pratique la méditation pour augmenter ta capacité attentionnelle",
+                    "6) ⭐ Commence par les tâches difficiles quand ton énergie est au maximum"
+                ].join('\n'),
+
+                quiz: [
+                    "Excellent choix ! Les quiz sont un excellent moyen de réviser.",
+                    "Je peux te proposer des quiz sur différents sujets:",
+                    "1) 📚 Méthodologie d'étude",
+                    "2) 🌍 Culture générale",
+                    "3) ➕ Mathématiques",
+                    "4) 📝 Français",
+                    "5) 🏛️ Histoire-Géographie",
+                    "Sur quel sujet aimerais-tu être interrogé ?"
+                ].join('\n'),
+
+                ressources: [
+                    "J'ai plein de ressources à te recommander !",
+                    "Voici ce que je peux te proposer:",
+                    "1) 📋 Fiches de méthodologie pour apprendre à apprendre",
+                    "2) ✍️ Techniques de prise de notes efficaces (Cornell, Mind Mapping)",
+                    "3) 🎯 Stratégies pour réussir tes examens",
+                    "4) 🔍 Exercices pour améliorer ta concentration",
+                    "5) 📊 Plans de révision personnalisés",
+                    "Quel type de ressources t'intéresse le plus ?"
+                ].join('\n')
+            };
+
+            // Fonction pour générer une réponse du chatbot
+            function generateResponse(userMessage) {
+                userMessage = userMessage.toLowerCase();
+
+                if (userMessage.includes('organis') || userMessage.includes('planif') || userMessage.includes('temps')) {
+                    return knowledgeBase.organisation;
+                } else if (userMessage.includes('motiv') || userMessage.includes('démotiv')) {
+                    return knowledgeBase.motivation;
+                } else if (userMessage.includes('mémoris') || userMessage.includes('apprendre') || userMessage.includes('révis')) {
+                    return knowledgeBase.mémorisation;
+                } else if (userMessage.includes('stress') || userMessage.includes('anxiété') || userMessage.includes('anxieux')) {
+                    return knowledgeBase.stress;
+                } else if (userMessage.includes('concentr') || userMessage.includes('distrait') || userMessage.includes('focus')) {
+                    return knowledgeBase.concentration;
+                } else if (userMessage.includes('quiz') || userMessage.includes('question') || userMessage.includes('test')) {
+                    return knowledgeBase.quiz;
+                } else if (userMessage.includes('ressour') || userMessage.includes('document') || userMessage.includes('fiche')) {
+                    return knowledgeBase.ressources;
+                } else if (userMessage.includes('bonjour') || userMessage.includes('salut') || userMessage.includes('coucou')) {
+                    return "👋 Bonjour ! Comment puis-je t'aider à améliorer tes performances scolaires aujourd'hui ?";
+                } else if (userMessage.includes('merci') || userMessage.includes('super') || userMessage.includes('parfait')) {
+                    return "😊 Avec plaisir ! N'hésite pas si tu as d'autres questions. Je suis là pour t'aider à réussir !";
+                } else {
+                    return "🤔 Je ne suis pas sûr de comprendre. Peux-tu reformuler ? Je peux t'aider avec l'organisation, la motivation, la mémorisation, la gestion du stress, la concentration, ou te proposer des quiz et ressources.";
+                }
+            }
+
+            // Gérer l'envoi de message
+            function handleSendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+
+                    // Afficher l'indicateur de frappe
+                    showTypingIndicator();
+
+                    // Simuler un délai de réponse plus réaliste
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        const response = generateResponse(message);
+                        addMessage(response, false);
+                    }, 1500);
+                }
+            }
+
+            // Gérer la navigation dans le menu
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+
+                    // Masquer toutes les sections de contenu
+                    contentSections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+
+                    // Afficher la section cible
+                    if (target === 'chat') {
+                        document.getElementById('chat-section').style.display = 'block';
+                    } else if (target === 'resources') {
+                        document.getElementById('resources-section').style.display = 'block';
+                    } else if (target === 'quiz') {
+                        document.getElementById('quiz-section').style.display = 'block';
+                    } else if (target === 'progress') {
+                        // Pour l'exemple, on affiche le chat si progression n'est pas implémentée
+                        document.getElementById('chat-section').style.display = 'block';
+                        addMessage("📈 La fonctionnalité de suivi de progression est en cours de développement. Elle te permettra bientôt de visualiser tes progrès et statistiques d'apprentissage !", false);
+                    } else if (target === 'settings') {
+                        // Pour l'exemple, on affiche le chat si paramètres n'est pas implémentée
+                        document.getElementById('chat-section').style.display = 'block';
+                        addMessage("⚙️ La section paramètres n'est pas encore disponible. Elle te permettra bientôt de personnaliser ton expérience avec EduBot !", false);
+                    }
+                });
+            });
+
+            // Événements
+            sendBtn.addEventListener('click', handleSendMessage);
+
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSendMessage();
+                }
+            });
+
+            // Gérer les réponses rapides
+            const quickReplyButtons = document.querySelectorAll('.quick-reply');
+            quickReplyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const message = this.getAttribute('data-msg');
+                    userInput.value = message;
+                    handleSendMessage();
+                });
+            });
+
+            // Gérer les puces de suggestion
+            suggestionChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    let message = "";
+                    switch (this.textContent) {
+                        case "Planification":
+                            message = "Comment mieux planifier mon travail ?";
+                            break;
+                        case "Mémorisation":
+                            message = "Comment améliorer ma mémoire ?";
+                            break;
+                        case "Concentration":
+                            message = "Comment rester concentré plus longtemps ?";
+                            break;
+                        case "Gestion du stress":
+                            message = "Comment gérer le stress avant un examen ?";
+                            break;
+                        default:
+                            message = this.textContent;
+                    }
+                    userInput.value = message;
+                    handleSendMessage();
+                });
+            });
+
+            // Gérer la sélection des options de quiz
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Retirer la sélection précédente
+                    quizOptions.forEach(opt => opt.classList.remove('selected'));
+
+                    // Sélectionner l'option cliquée
+                    this.classList.add('selected');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
